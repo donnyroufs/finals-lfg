@@ -1,4 +1,5 @@
 import { AlreadyJoinedException } from 'src/modules/contestants/domain/AlreadyJoinedException';
+import { CannotLeaveException } from 'src/modules/contestants/domain/CannotLeaveException';
 import { Contestant } from 'src/modules/contestants/domain/Contestant';
 import { ContestantJoinedEvent } from 'src/modules/contestants/domain/ContestantJoinedEvent';
 import { GUID } from 'src/shared-kernel/ddd/GUID';
@@ -26,6 +27,12 @@ describe('Contestant', () => {
     contestant.leave();
 
     expect(contestant.joined).toBe(false);
+  });
+
+  test('Cannot leave when not joined', () => {
+    const act = (): void => contestant.leave();
+
+    expect(act).toThrow(CannotLeaveException);
   });
 
   test('Cannot join when already joined', () => {

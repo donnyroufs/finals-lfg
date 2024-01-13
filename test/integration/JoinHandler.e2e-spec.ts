@@ -1,4 +1,5 @@
-import { EntityManager } from '@mikro-orm/core';
+import { EntityManager, RequestContext } from '@mikro-orm/core';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { NestApplication } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 
@@ -21,7 +22,7 @@ describe('JoinHandler', () => {
     }).compile();
 
     app = moduleRef.createNestApplication();
-    em = moduleRef.get(EntityManager);
+    em = moduleRef.get(EntityManager).fork();
     handler = moduleRef.get(JoinHandler);
     await app.init();
   });
@@ -39,7 +40,9 @@ describe('JoinHandler', () => {
       const command = new JoinCommand(contestant.userId);
       await handler.execute(command);
 
-      const confirmation = await em.findOne(Contestant, { id: contestant.id });
+      const confirmation = await em.findOne(Contestant, {
+        userId: contestant.userId,
+      });
       expect(confirmation?.joined).toBe(true);
     });
   });

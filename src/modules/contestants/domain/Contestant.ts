@@ -4,6 +4,7 @@ import { GUID } from '../../../shared-kernel/ddd/GUID';
 import { AggregateRoot } from '../../../shared-kernel/ddd/AggregateRoot';
 import { AlreadyJoinedException } from './AlreadyJoinedException';
 import { ContestantJoinedEvent } from './ContestantJoinedEvent';
+import { CannotLeaveException } from './CannotLeaveException';
 
 class ORMGuid extends Type<GUID, string> {
   public override convertToDatabaseValue(value: GUID): string {
@@ -56,6 +57,10 @@ export class Contestant extends AggregateRoot {
   }
 
   public leave(): void {
+    if (!this._joined) {
+      throw new CannotLeaveException();
+    }
+
     this._joined = false;
   }
 

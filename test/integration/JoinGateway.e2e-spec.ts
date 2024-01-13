@@ -1,29 +1,12 @@
 import { EntityManager } from '@mikro-orm/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { Test } from '@nestjs/testing';
-import * as request from 'supertest';
+import { createClient, waitForEvent } from '../utils/index';
 
 import { DatabaseModule } from 'src/database/DatabaseModule';
 import { Contestant } from 'src/modules/contestants/domain/Contestant';
 import { JoinModule } from 'src/modules/contestants/features/join/JoinModule';
-import { Socket, io } from 'socket.io-client';
-
-async function waitForEvent<TResult = any>(
-  evt: string,
-  socket: Socket,
-): Promise<TResult> {
-  return new Promise((res) => {
-    socket.on(evt, (data: TResult) => {
-      return res(data);
-    });
-  });
-}
-
-function createClient(sockets: Socket[]): Socket {
-  const socket = io('http://localhost:5000', { multiplex: false });
-  sockets.push(socket);
-  return socket;
-}
+import { Socket } from 'socket.io-client';
 
 describe('JoinGateway', () => {
   const sockets: Socket[] = [];

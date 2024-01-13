@@ -10,7 +10,7 @@ import { CqrsModule } from '@nestjs/cqrs';
   providers: [DomainEventsSubscriber],
 })
 export class DatabaseModule {
-  public static forTests(allowGlobalContext: boolean = false): any {
+  public static forTests(allowGlobalContext = false): any {
     return MikroOrmModule.forRoot({
       ...MikroORMConfig,
       dbName: 'finalshq-dev',
