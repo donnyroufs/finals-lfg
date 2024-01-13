@@ -1,9 +1,10 @@
 import { Module, OnApplicationBootstrap } from '@nestjs/common';
 
 import { DatabaseModule } from './database/DatabaseModule';
+import { ContestantsModule } from './modules/contestants/ContestantsModule';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, ContestantsModule],
 })
 export class AppModule implements OnApplicationBootstrap {
   public onApplicationBootstrap(): void {
