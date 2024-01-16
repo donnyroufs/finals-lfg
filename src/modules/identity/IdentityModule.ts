@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
+import { CreateContestantModule } from './features/create-contestant/CreateContestantModule';
 
 @Module({
-  providers: [],
-  exports: [],
+  imports: [CreateContestantModule],
 })
 export class IdentityModule {}

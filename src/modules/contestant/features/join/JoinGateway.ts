@@ -41,7 +41,6 @@ export class JoinGateway {
     @ConnectedSocket() socket: Socket,
     @User() user: User,
   ): Promise<void> {
-    console.log('im joining again!');
     await this._commandBus.execute(new JoinCommand(user.id));
     this._joinedDataSource.set(socket.id, user.id);
     socket.emit('joined');

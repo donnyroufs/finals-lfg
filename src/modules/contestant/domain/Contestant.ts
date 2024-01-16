@@ -36,7 +36,7 @@ export class Contestant extends AggregateRoot {
   @Property({ columnType: 'boolean', name: 'joined' })
   private _joined: boolean;
 
-  @Property({ columnType: 'varchar', name: 'userId' })
+  @Property({ columnType: 'varchar', name: 'userId', unique: true })
   private _userId: string;
 
   private constructor(joined: boolean, userId: string, id: GUID) {
