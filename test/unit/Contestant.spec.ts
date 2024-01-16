@@ -1,7 +1,7 @@
-import { AlreadyJoinedException } from 'src/modules/contestants/domain/AlreadyJoinedException';
-import { CannotLeaveException } from 'src/modules/contestants/domain/CannotLeaveException';
-import { Contestant } from 'src/modules/contestants/domain/Contestant';
-import { ContestantJoinedEvent } from 'src/modules/contestants/domain/ContestantJoinedEvent';
+import { AlreadyJoinedException } from 'src/modules/contestant/domain/AlreadyJoinedException';
+import { CannotLeaveException } from 'src/modules/contestant/domain/CannotLeaveException';
+import { Contestant } from 'src/modules/contestant/domain/Contestant';
+import { ContestantJoinedEvent } from 'src/modules/contestant/domain/ContestantJoinedEvent';
 import { GUID } from 'src/shared-kernel/ddd/GUID';
 
 describe('Contestant', () => {

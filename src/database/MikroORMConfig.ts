@@ -4,7 +4,7 @@ import { defineConfig } from '@mikro-orm/core';
 import { Migrator } from '@mikro-orm/migrations';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import * as path from 'path';
-import { Contestant } from '../modules/contestants/domain/Contestant';
+import { Contestant } from '../modules/contestant/domain/Contestant';
 import { DomainEventsSubscriber } from './DomainEventsSubscriber';
 
 export default defineConfig({

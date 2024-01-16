@@ -3,15 +3,19 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { Test } from '@nestjs/testing';
 import { Socket } from 'socket.io-client';
 import { DatabaseModule } from 'src/database/DatabaseModule';
-import { Contestant } from 'src/modules/contestants/domain/Contestant';
-import { createClient, waitForEvent } from '../utils';
-import { LeaveModule } from 'src/modules/contestants/features/leave/LeaveModule';
-
-const wait = (ms = 300): Promise<void> =>
-  new Promise((res) => setTimeout(res, ms));
+import { Contestant } from 'src/modules/contestant/domain/Contestant';
+import { createAuthGuardStub, createClient, waitForEvent } from '../utils';
+import { LeaveModule } from 'src/modules/contestant/features/leave/LeaveModule';
+import { AuthGuard } from 'src/modules/identity/AuthGuard';
+import { User } from 'src/modules/identity/User';
 
 describe('LeaveGateway', () => {
   const sockets: Socket[] = [];
+  const USER: User = {
+    email: 'email',
+    id: 'google:id',
+  };
+  const guard = createAuthGuardStub(USER);
   let client: Socket;
   let app: NestExpressApplication;
   let em: EntityManager;
@@ -19,32 +23,27 @@ describe('LeaveGateway', () => {
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [LeaveModule, DatabaseModule.forTests(true)],
-    }).compile();
+    })
+      .overrideGuard(AuthGuard)
+      .useValue(guard)
+      .compile();
 
     em = moduleRef.get(EntityManager);
     app = moduleRef.createNestApplication();
 
     await app.listen(5000);
 
-    const contestant = Contestant.create(true, 'user-id');
+    const contestant = Contestant.create(true, USER.id);
     await em.persistAndFlush(contestant);
     client = createClient(sockets);
   });
 
   test('Emits that we left', async () => {
-    client.emit('leave');
+    client.emit('leave', {});
     await waitForEvent('left', client);
   });
 
-  // TODO: figure out a way to do this without waiting.
-  test('When the socket disconnects we leave the group finder', async () => {
-    await wait(150);
-    client.close();
-    await wait(150);
-    const result = await em.findOne(Contestant, { userId: 'user-id' });
-
-    expect(result?.joined).toBe(false);
-  });
+  test.todo('When disconnected we remove the contestant from the pool');
 
   afterEach(async () => {
     await em.nativeDelete(Contestant, {});

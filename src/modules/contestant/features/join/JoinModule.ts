@@ -6,9 +6,14 @@ import { DateService } from 'src/shared-kernel/DateService';
 import { JoinHandler } from './JoinHandler';
 import { Contestant } from '../../domain/Contestant';
 import { JoinGateway } from './JoinGateway';
+import { JoinedDataSourceModule } from '../../JoinedDataSourceModule';
 
 @Module({
-  imports: [MikroOrmModule.forFeature([Contestant]), CqrsModule],
+  imports: [
+    MikroOrmModule.forFeature([Contestant]),
+    CqrsModule,
+    JoinedDataSourceModule,
+  ],
   providers: [JoinHandler, DateService, JoinGateway],
 })
 export class JoinModule {}

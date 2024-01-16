@@ -2,12 +2,12 @@ import { EntityManager } from '@mikro-orm/core';
 import { NestApplication } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 import { DatabaseModule } from 'src/database/DatabaseModule';
-import { CannotLeaveException } from 'src/modules/contestants/domain/CannotLeaveException';
-import { Contestant } from 'src/modules/contestants/domain/Contestant';
-import { JoinHandler } from 'src/modules/contestants/features/join/JoinHandler';
-import { LeaveCommand } from 'src/modules/contestants/features/leave/LeaveCommand';
-import { LeaveHandler } from 'src/modules/contestants/features/leave/LeaveHandler';
-import { LeaveModule } from 'src/modules/contestants/features/leave/LeaveModule';
+import { CannotLeaveException } from 'src/modules/contestant/domain/CannotLeaveException';
+import { Contestant } from 'src/modules/contestant/domain/Contestant';
+import { JoinHandler } from 'src/modules/contestant/features/join/JoinHandler';
+import { LeaveCommand } from 'src/modules/contestant/features/leave/LeaveCommand';
+import { LeaveHandler } from 'src/modules/contestant/features/leave/LeaveHandler';
+import { LeaveModule } from 'src/modules/contestant/features/leave/LeaveModule';
 import { GUID } from 'src/shared-kernel/ddd/GUID';
 
 describe('leave handler', () => {
