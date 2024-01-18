@@ -21,11 +21,10 @@ export class DomainEventsSubscriber implements EventSubscriber {
   public async afterFlush(args: FlushEventArgs): Promise<void> {
     const changeSetsWithEvents = args.uow
       .getChangeSets()
+      .filter((x) => x.entity instanceof AggregateRoot)
       .filter((x) => x.entity.getDomainEvents().length > 0);
 
     for await (const changeSet of changeSetsWithEvents) {
-      if (!(changeSet.entity instanceof AggregateRoot)) continue;
-
       const events = changeSet.entity.getDomainEvents();
       changeSet.entity.commit();
       this._logger.log(

@@ -1,10 +1,10 @@
 import { EntityManager } from '@mikro-orm/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { Test } from '@nestjs/testing';
-import { DatabaseModule } from 'src/database/DatabaseModule';
 import { Contestant } from 'src/modules/contestant/domain/Contestant';
 import * as supertest from 'supertest';
 import { CreateContestantModule } from 'src/modules/identity/features/create-contestant/CreateContestantModule';
+import { DatabaseModule } from 'src/shared-kernel/database/DatabaseModule';
 
 describe('CreateContestantController', () => {
   let app: NestExpressApplication;

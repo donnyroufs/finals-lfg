@@ -7,18 +7,20 @@ import {
   waitForEvent,
 } from '../utils/index';
 
-import { DatabaseModule } from 'src/database/DatabaseModule';
 import { Contestant } from 'src/modules/contestant/domain/Contestant';
 import { JoinModule } from 'src/modules/contestant/features/join/JoinModule';
 import { Socket } from 'socket.io-client';
 import { User } from 'src/modules/identity/User';
 import { AuthGuard } from 'src/modules/identity/AuthGuard';
+import { GUID } from 'src/shared-kernel/ddd/GUID';
+import { DatabaseModule } from 'src/shared-kernel/database/DatabaseModule';
 
 describe('JoinGateway', () => {
   const sockets: Socket[] = [];
   const USER: User = {
     email: 'email',
     id: 'google:id',
+    contestantId: GUID.new(),
   };
   const guard = createAuthGuardStub(USER);
 

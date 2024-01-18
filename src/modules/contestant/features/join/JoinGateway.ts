@@ -1,4 +1,4 @@
-import { Inject, UseFilters, UseGuards } from '@nestjs/common';
+import { UseFilters, UseGuards } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 
 import { JoinCommand } from './JoinCommand';
@@ -15,7 +15,7 @@ import { AuthGuard } from 'src/modules/identity/AuthGuard';
 import { User } from 'src/modules/identity/User';
 import { CreateRequestContext } from '@mikro-orm/postgresql';
 import { MikroORM } from '@mikro-orm/core';
-import { JoinedDataSourceToken } from '../../JoinedDataSourceModule';
+import { SocketsDataSource } from '../../../../shared-kernel/gateway/JoinedDataSourceModule';
 
 @WebSocketGateway({
   cors: {
@@ -29,8 +29,7 @@ export class JoinGateway {
   public constructor(
     private readonly _commandBus: CommandBus,
     private readonly orm: MikroORM,
-    @Inject(JoinedDataSourceToken)
-    private readonly _joinedDataSource: Map<string, string>,
+    private readonly _source: SocketsDataSource,
   ) {}
 
   @UseFilters(JoinExceptionFilter)
@@ -42,7 +41,7 @@ export class JoinGateway {
     @User() user: User,
   ): Promise<void> {
     await this._commandBus.execute(new JoinCommand(user.id));
-    this._joinedDataSource.set(socket.id, user.id);
+    this._source.set(socket, user.contestantId);
     socket.emit('joined');
   }
 }

@@ -49,4 +49,11 @@ describe('Contestant', () => {
       new ContestantJoinedEvent(contestant.id, CURRENT_DATE),
     ]);
   });
+
+  test('sets joined to false when found a group', () => {
+    contestant.join(CURRENT_DATE);
+    contestant.foundGroup();
+
+    expect(contestant.joined).toBe(false);
+  });
 });

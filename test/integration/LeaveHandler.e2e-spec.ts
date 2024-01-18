@@ -1,18 +1,17 @@
 import { EntityManager } from '@mikro-orm/core';
 import { NestApplication } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
-import { DatabaseModule } from 'src/database/DatabaseModule';
 import { CannotLeaveException } from 'src/modules/contestant/domain/CannotLeaveException';
 import { Contestant } from 'src/modules/contestant/domain/Contestant';
-import { JoinHandler } from 'src/modules/contestant/features/join/JoinHandler';
 import { LeaveCommand } from 'src/modules/contestant/features/leave/LeaveCommand';
 import { LeaveHandler } from 'src/modules/contestant/features/leave/LeaveHandler';
 import { LeaveModule } from 'src/modules/contestant/features/leave/LeaveModule';
+import { DatabaseModule } from 'src/shared-kernel/database/DatabaseModule';
 import { GUID } from 'src/shared-kernel/ddd/GUID';
 
 describe('leave handler', () => {
   let app: NestApplication;
-  let handler: JoinHandler;
+  let handler: LeaveHandler;
   let em: EntityManager;
 
   beforeEach(async () => {
@@ -36,7 +35,7 @@ describe('leave handler', () => {
     });
 
     test('When the contestant tries to leave, Then the contestant is told they are not in the group finder', async () => {
-      const command = new LeaveCommand(contestant.userId);
+      const command = new LeaveCommand(contestant.id);
       const act = (): Promise<void> => handler.execute(command);
 
       expect(act).rejects.toThrow(CannotLeaveException);
@@ -53,7 +52,7 @@ describe('leave handler', () => {
     });
 
     test('When the contestant leaves, Then the contestant is removed from to the group Finder', async () => {
-      const command = new LeaveCommand(contestant.userId);
+      const command = new LeaveCommand(contestant.id);
       await handler.execute(command);
 
       const confirmation = await em.findOne(Contestant, { id: contestant.id });

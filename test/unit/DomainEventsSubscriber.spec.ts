@@ -1,7 +1,7 @@
 import { EventManager, FlushEventArgs, EntityManager } from '@mikro-orm/core';
 import { EventBus } from '@nestjs/cqrs';
 import { mock, mockDeep } from 'jest-mock-extended';
-import { DomainEventsSubscriber } from 'src/database/DomainEventsSubscriber';
+import { DomainEventsSubscriber } from 'src/shared-kernel/database/DomainEventsSubscriber';
 import { AggregateRoot } from 'src/shared-kernel/ddd/AggregateRoot';
 import { GUID } from 'src/shared-kernel/ddd/GUID';
 import { IDomainEvent } from 'src/shared-kernel/ddd/IDomainEvent';
@@ -17,7 +17,6 @@ describe('DomainEventsSubscriber', () => {
 
     const testEntity = new TestEntity(GUID.new());
     const evt: IDomainEvent = {
-      id: GUID.new(),
       occuredOn: new Date(),
     };
     testEntity.apply(evt);

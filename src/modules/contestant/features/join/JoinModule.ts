@@ -6,7 +6,7 @@ import { DateService } from 'src/shared-kernel/DateService';
 import { JoinHandler } from './JoinHandler';
 import { Contestant } from '../../domain/Contestant';
 import { JoinGateway } from './JoinGateway';
-import { JoinedDataSourceModule } from '../../JoinedDataSourceModule';
+import { JoinedDataSourceModule } from '../../../../shared-kernel/gateway/JoinedDataSourceModule';
 
 @Module({
   imports: [

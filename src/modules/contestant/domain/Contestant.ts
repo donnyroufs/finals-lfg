@@ -1,24 +1,11 @@
-import { Entity, PrimaryKey, Property, Type } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
 import { GUID } from '../../../shared-kernel/ddd/GUID';
 import { AggregateRoot } from '../../../shared-kernel/ddd/AggregateRoot';
 import { AlreadyJoinedException } from './AlreadyJoinedException';
 import { ContestantJoinedEvent } from './ContestantJoinedEvent';
 import { CannotLeaveException } from './CannotLeaveException';
-
-class ORMGuid extends Type<GUID, string> {
-  public override convertToDatabaseValue(value: GUID): string {
-    return value.value;
-  }
-
-  public override convertToJSValue(value: string): GUID {
-    return GUID.from(value);
-  }
-
-  public override getColumnType(): string {
-    return 'uuid';
-  }
-}
+import { ORMGuid } from 'src/shared-kernel/database/types/ORMGuid';
 
 @Entity({ tableName: 'contestants' })
 export class Contestant extends AggregateRoot {
@@ -36,7 +23,11 @@ export class Contestant extends AggregateRoot {
   @Property({ columnType: 'boolean', name: 'joined' })
   private _joined: boolean;
 
-  @Property({ columnType: 'varchar', name: 'userId', unique: true })
+  @Property({
+    columnType: 'varchar',
+    name: 'userId',
+    unique: true,
+  })
   private _userId: string;
 
   private constructor(joined: boolean, userId: string, id: GUID) {
@@ -61,6 +52,10 @@ export class Contestant extends AggregateRoot {
       throw new CannotLeaveException();
     }
 
+    this._joined = false;
+  }
+
+  public foundGroup(): void {
     this._joined = false;
   }
 

@@ -3,12 +3,12 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { NestApplication } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 
-import { DatabaseModule } from 'src/database/DatabaseModule';
 import { AlreadyJoinedException } from 'src/modules/contestant/domain/AlreadyJoinedException';
 import { Contestant } from 'src/modules/contestant/domain/Contestant';
 import { JoinCommand } from 'src/modules/contestant/features/join/JoinCommand';
 import { JoinHandler } from 'src/modules/contestant/features/join/JoinHandler';
 import { JoinModule } from 'src/modules/contestant/features/join/JoinModule';
+import { DatabaseModule } from 'src/shared-kernel/database/DatabaseModule';
 import { GUID } from 'src/shared-kernel/ddd/GUID';
 
 describe('JoinHandler', () => {

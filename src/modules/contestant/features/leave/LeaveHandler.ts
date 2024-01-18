@@ -9,7 +9,7 @@ export class LeaveHandler implements ICommandHandler<LeaveCommand> {
 
   public async execute(command: LeaveCommand): Promise<void> {
     const contestant = await this._em.findOne(Contestant, {
-      userId: command.userId,
+      id: command.contestantId,
     });
 
     if (!contestant) return;

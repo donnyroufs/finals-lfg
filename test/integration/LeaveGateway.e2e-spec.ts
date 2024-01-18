@@ -2,18 +2,20 @@ import { EntityManager } from '@mikro-orm/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { Test } from '@nestjs/testing';
 import { Socket } from 'socket.io-client';
-import { DatabaseModule } from 'src/database/DatabaseModule';
 import { Contestant } from 'src/modules/contestant/domain/Contestant';
 import { createAuthGuardStub, createClient, waitForEvent } from '../utils';
 import { LeaveModule } from 'src/modules/contestant/features/leave/LeaveModule';
 import { AuthGuard } from 'src/modules/identity/AuthGuard';
 import { User } from 'src/modules/identity/User';
+import { GUID } from 'src/shared-kernel/ddd/GUID';
+import { DatabaseModule } from 'src/shared-kernel/database/DatabaseModule';
 
 describe('LeaveGateway', () => {
   const sockets: Socket[] = [];
   const USER: User = {
     email: 'email',
     id: 'google:id',
+    contestantId: GUID.new(),
   };
   const guard = createAuthGuardStub(USER);
   let client: Socket;

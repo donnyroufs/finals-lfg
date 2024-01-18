@@ -1,11 +1,12 @@
 import { Module, OnApplicationBootstrap } from '@nestjs/common';
 
-import { DatabaseModule } from './database/DatabaseModule';
 import { ContestantsModule } from './modules/contestant/ContestantsModule';
 import { IdentityModule } from './modules/identity/IdentityModule';
+import { GroupModule } from './modules/group/GroupModule';
+import { DatabaseModule } from './shared-kernel/database/DatabaseModule';
 
 @Module({
-  imports: [DatabaseModule, ContestantsModule, IdentityModule],
+  imports: [DatabaseModule, ContestantsModule, IdentityModule, GroupModule],
 })
 export class AppModule implements OnApplicationBootstrap {
   public onApplicationBootstrap(): void {

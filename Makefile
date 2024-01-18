@@ -1,9 +1,9 @@
 app:
+	yarn build
 	docker compose up -d
 	sleep 1
-	ngrok http 5000
-	yarn mikro-orm migration:fresh
+	$(MAKE) db-fresh
 	yarn start:dev
 
 db-fresh:
-	yarn mikro-orm migration:fresh
+	yarn mikro-orm migration:up --config ./dist/shared-kernel/database/MikroORMConfig.js 

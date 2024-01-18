@@ -14,7 +14,7 @@ import { LeaveCommand } from './LeaveCommand';
 import { CreateRequestContext, MikroORM } from '@mikro-orm/core';
 import { User } from 'src/modules/identity/User';
 import { AuthGuard } from 'src/modules/identity/AuthGuard';
-import { JoinedDataSourceToken } from '../../JoinedDataSourceModule';
+import { SocketsDataSource } from '../../../../shared-kernel/gateway/JoinedDataSourceModule';
 
 @WebSocketGateway({
   cors: {
@@ -28,17 +28,16 @@ export class LeaveGateway implements OnGatewayDisconnect {
   public constructor(
     private readonly _commandBus: CommandBus,
     private readonly orm: MikroORM,
-    @Inject(JoinedDataSourceToken)
-    private readonly _joinedDataSource: Map<string, string>,
+    private readonly _source: SocketsDataSource,
   ) {}
 
   @CreateRequestContext()
   public async handleDisconnect(socket: Socket): Promise<void> {
-    const userId = this._joinedDataSource.get(socket.id);
+    const contestantId = this._source.get(socket);
 
-    if (!userId) return;
+    if (!contestantId) return;
 
-    await this._commandBus.execute(new LeaveCommand(userId));
+    await this._commandBus.execute(new LeaveCommand(contestantId));
   }
 
   @SubscribeMessage('leave')
@@ -48,7 +47,7 @@ export class LeaveGateway implements OnGatewayDisconnect {
     @ConnectedSocket() socket: Socket,
     @User() user: User,
   ): Promise<void> {
-    await this._commandBus.execute(new LeaveCommand(user.id));
+    await this._commandBus.execute(new LeaveCommand(user.contestantId));
     socket.emit('left');
   }
 }
