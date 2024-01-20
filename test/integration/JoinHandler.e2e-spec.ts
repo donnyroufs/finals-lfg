@@ -1,4 +1,4 @@
-import { EntityManager, RequestContext } from '@mikro-orm/core';
+import { EntityManager, MikroORM, RequestContext } from '@mikro-orm/core';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { NestApplication } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
@@ -18,12 +18,15 @@ describe('JoinHandler', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [JoinModule, DatabaseModule.forTests(true)],
+      imports: [JoinModule, DatabaseModule.forTests(false)],
     }).compile();
 
     app = moduleRef.createNestApplication();
     em = moduleRef.get(EntityManager).fork();
     handler = moduleRef.get(JoinHandler);
+    const orm = moduleRef.get(MikroORM);
+
+    await orm.schema.refreshDatabase();
     await app.init();
   });
 
@@ -34,6 +37,7 @@ describe('JoinHandler', () => {
     beforeEach(async () => {
       contestant = Contestant.create(false, USER_ID);
       await em.persistAndFlush(contestant);
+      em.clear();
     });
 
     test('When the contestant joins, Then the contestant is added to the group Finder', async () => {
